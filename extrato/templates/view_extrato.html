@@ -33,12 +33,14 @@
                 </select>
             </div>
 
-            <div class="col-md">
-                <label>Período</label>
-                <select name="periodo" class="form-select">
-                    <option>Últimos 7 dias</option>
-                </select>
-            </div>
+                <div class="col-md">
+                    <label>Período</label>
+                    <select name="periodo" class="form-select">
+                        <option value="7_dias">Últimos 7 dias</option>
+                        <option value="10_dias">Últimos 10 dias</option>
+                        <option value="20_dias">Últimos 20 dias</option>
+                    </select>
+                </div>
         
             
         </div>
@@ -50,7 +52,10 @@
             </div>
             </form>
             <div class="col-md-2">
-                <a href="" class="botao-secundario">Exportar extrato</a>
+                <a href="{% url 'exportar_pdf' %}" class="botao-secundario">Exportar extrato</a>
+            </div>
+            <div class="col-md-2">
+                <a href="{% url 'view_extrato' %}" name="limpar_filtros" class="botao-secundario-direita">Limpar Filtros</a>
             </div>
         </div>
         <br>

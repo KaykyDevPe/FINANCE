@@ -3,7 +3,13 @@ from perfil.models import Categoria, Conta
 from .models import Valores
 from django.contrib import messages
 from django.contrib.messages import constants
-from datetime import datetime
+from datetime import datetime, timedelta
+from django.template.loader import render_to_string
+import os
+from django.conf import settings
+from weasyprint import HTML
+from io import BytesIO
+from django.http import FileResponse
 
 def novo_valor(request):
     if request.method == 'GET':
@@ -49,6 +55,8 @@ def view_extrato(request):
     
     conta_get = request.GET.get('conta')
     categoria_get = request.GET.get('categoria')
+    limpar_filtros=request.GET.get('limpar_filtros')
+    periodo_get = request.GET.get('periodo')
     
     valores = Valores.objects.filter(data__month=datetime.now().month)
     
@@ -56,5 +64,29 @@ def view_extrato(request):
         valores = valores.filter(conta__id=conta_get)
     if categoria_get:
         valores = valores.filter(categoria__id=categoria_get)
+    if periodo_get == '7_dias':
+        valores = valores.filter(data__gte=datetime.now() - timedelta(days=7))
+    elif periodo_get == '10_dias':
+        valores = valores.filter(data__gte=datetime.now() - timedelta(days=10))
+    elif periodo_get == '20_dias':
+        valores = valores.filter(data__gte=datetime.now() - timedelta(days=20))
+        
+    if limpar_filtros:
+        return redirect('/extrato/view_extrato')
       
     return render(request, 'view_extrato.html', {'valores': valores, 'contas': contas, 'categorias': categorias})
+
+
+def exportar_pdf(request):
+    valores = Valores.objects.filter(data__month=datetime.now().month)
+    
+    path_template = os.path.join(settings.BASE_DIR,'templates/partials/extrato.html')
+    template_render = render_to_string(path_template, {'valores': valores})
+    
+    path_output = BytesIO()
+    
+    HTML(string=template_render).write_pdf(path_output)
+    
+    path_output.seek(0)
+    
+    return FileResponse(path_output, filename="extrato.pdf")
