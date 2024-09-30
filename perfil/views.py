@@ -4,13 +4,26 @@ from .models import Conta, Categoria
 from django.contrib import messages
 from django.contrib.messages import constants
 from .utils import calcula_total
+from extrato.models import Valores
+from datetime import datetime
 
 def home(request):
+    valores = Valores.objects.filter(data__month=datetime.now().month)
+    entradas = valores.filter(tipo='E')
+    saida = valores.filter(tipo='S')
+    
+    total_entradas = calcula_total(entradas, 'valor')
+    total_saidas = calcula_total(saida, 'valor')
+    
+    
     contas = Conta.objects.all()
         
     total_contas = calcula_total(contas, 'valor')
     
-    return render(request, 'home.html', {'contas': contas, 'total_contas': total_contas,})
+    return render(request, 'home.html', {'contas': contas, 
+                                         'total_contas': total_contas,
+                                         'total_entradas': total_entradas,
+                                         'total_saidas': total_saidas})
 
 def gerenciar(request):
     contas = Conta.objects.all()
@@ -73,3 +86,18 @@ def update_categoria(request, id):
     
     messages.add_message(request, constants.SUCCESS, 'Categoria atualizada com sucesso')
     return redirect('/perfil/gerenciar')
+
+def dashboard(request):
+    dados = {}
+    
+    categorias = Categoria.objects.all()
+    
+    for categoria in categorias:
+        total = 0 
+        valores = Valores.objects.filter(categoria=categoria)
+        for v in valores:
+            total = total + v.valor
+        
+        dados[categoria.categoria] = total
+    
+    return render(request, 'dashboard.html', {'labels': list(dados.keys()), 'values': list(dados.values())})
