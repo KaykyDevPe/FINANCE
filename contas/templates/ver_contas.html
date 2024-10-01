@@ -43,7 +43,7 @@
                                         Dia: {{conta.dia_pagamento}}
                                     </div>
                                     <div class="col-md text-center">
-                                        <a href="#" class="botao-principal">PAGAR</a>
+                                        <a href="{% url 'pagar_conta' conta.id %}" class="botao-principal">PAGAR</a>
                                     </div> 
                                 </div>
                             </div>
@@ -70,10 +70,11 @@
                                         Dia: {{conta.dia_pagamento}}
                                     </div>
                                     <div class="col-md text-center">
-                                        <a href="#" class="botao-principal">PAGAR</a>
+                                        <a href="{% url 'pagar_conta' conta.id %}" class="botao-principal">PAGAR</a>
                                     </div> 
                                 </div>
                             </div>
+                            <br>
                         {% endfor %}
                         {% endif %}
                         
@@ -96,10 +97,11 @@
                                         Dia: {{conta.dia_pagamento}}
                                     </div>
                                     <div class="col-md text-center">
-                                        <a href="#" class="botao-principal">PAGAR</a>
+                                        <a href="{% url 'pagar_conta' conta.id %}" class="botao-principal">PAGAR</a>
                                     </div> 
                                 </div>
                             </div>
+                            <br>
                         {% endfor %}
                         {% endif %}
                 </div>

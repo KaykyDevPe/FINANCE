@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from perfil.models import Categoria
+from perfil.models import Categoria, Conta
 from .models import ContaPagar, ContaPaga
 from django.contrib.messages import constants
 from django.contrib import messages
@@ -28,6 +28,19 @@ def definir_contas(request):
         
         messages.add_message(request, constants.SUCCESS, 'Conta cadastrada com sucesso!')
         return redirect('/contas/definir_contas')
+    
+def pagar_conta(request, id):
+    conta = ContaPagar.objects.get(id=id)   
+    
+    conta_paga = ContaPaga(
+        conta=conta,
+        data_pagamento=datetime.now()
+    )
+    
+    conta_paga.save()
+    
+    messages.add_message(request, constants.SUCCESS, 'Conta paga com sucesso')
+    return redirect('/contas/ver_contas')
     
 def ver_contas(request):
     MES_ATUAL = datetime.now().month
