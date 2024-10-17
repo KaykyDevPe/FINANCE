@@ -1,6 +1,6 @@
 # FINANCE
 
-Aplicação WEB, para gestão pessoal financeira, cadastro de contas bancárias, plano de contas, categorias, dashboards e barras de progresso para acompanhamento, relatórios e extratos, filtragem por data entre outros.
+Aplicação WEB, para gestão pessoal financeira, cadastro de contas bancárias, plano de contas, categorias, dashboards e barras de progresso para acompanhamento, relatórios e extratos, filtragem por data entre outros. Utilizando Python, Django, JavaScripg, HTML e CSS. Backend + Frontend + Estruturação do Banco de Dados.
 
 ## Comece por aqui
 
